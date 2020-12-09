@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+@font-face {
+  font-family: "Custom";
+  src: url(./fonts/Rosario-Regular.ttf);
+}

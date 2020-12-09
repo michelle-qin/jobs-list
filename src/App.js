@@ -1,25 +1,46 @@
-import logo from './logo.svg';
 import './App.css';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { gql } from '@apollo/client';
+import JobList from './JobList';
+import { ApolloProvider } from '@apollo/client';
+import React, { Component } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const client = new ApolloClient({
+  uri: 'https://api.graphql.jobs/',
+  cache: new InMemoryCache()
+});
+
+client
+  .query({
+    query: gql`{
+      cities {
+        name
+        jobs {
+          title
+          applyUrl
+          description
+          company {
+            name
+          }
+        }
+      }
+    }
+    `
+  })
+  .then(result => console.log(result));
+
+class App extends Component {
+  render() {
+    return (
+      <ApolloProvider client={client}>
+        <div>
+          <h1 style={{textAlign:'center', fontFamily:'Custom'}}>List of Jobs</h1>
+          <h3 style={{textAlign:'center', fontFamily:'Custom'}}><i>Hope you can find your dream job! :) </i></h3>
+          <JobList />
+        </div>
+      </ApolloProvider>
+    );
+  }
 }
 
 export default App;
